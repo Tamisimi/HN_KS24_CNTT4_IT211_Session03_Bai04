@@ -1,44 +1,32 @@
 /*
-Bài tập 1: Lý thuyết tổng quan về Web Service và định dạng dữ liệu
+1. Các thành phần có trong HTTP Request:
 
-1. Khái niệm Web Service:
-   Web Service là công nghệ cho phép các ứng dụng khác nhau có thể giao tiếp và trao đổi dữ liệu với nhau qua mạng internet bằng các giao thức chuẩn.
-   Nó hoạt động như một cầu nối giữa các hệ thống, cho phép gọi hàm từ xa.
-   Ví dụ: Ứng dụng ngân hàng gọi Web Service để kiểm tra thông tin tài khoản hoặc thực hiện chuyển khoản.
+- Method: POST → Dùng để tạo mới một tài nguyên (Create).
+- URL: /api/sanpham → Đường dẫn đến endpoint xử lý sản phẩm.
+- Headers:
+    + Host: example.com → Chỉ định tên miền máy chủ.
+    + Content-Type: application/json → Cho biết dữ liệu body đang ở định dạng JSON.
+    + Authorization: Bearer abc123 → Xác thực người dùng bằng Token (Bearer Token).
+    + Content-Length: 48 → Cho biết độ dài (bytes) của body.
 
-2. So sánh SOAP và REST
+- Body: {"ten":"Laptop","gia":1500000,"tonkho":10} → Dữ liệu gửi lên server để tạo sản phẩm mới.
 
-- Giao thức truyền tải:
-  SOAP: HTTP, SMTP, TCP...
-  REST: Thường là HTTP/HTTPS
+2. Các thành phần trong HTTP Response:
 
-- Định dạng dữ liệu chính:
-  SOAP: XML (bắt buộc)
-  REST: JSON (phổ biến nhất), có thể là XML
+- Status Line: HTTP/1.1 201 Created → Trạng thái phản hồi.
+- Headers:
+    + Date: ... → Thời gian server trả về response.
+    + Content-Type: application/json → Định dạng dữ liệu trả về là JSON.
+    + Location: /api/sanpham/101 → Đường dẫn đến tài nguyên vừa được tạo (rất quan trọng với POST).
 
-- Trạng thái (stateful/stateless):
-  SOAP: Có thể Stateful
-  REST: Stateless
+- Body: {"id":101,"ten":"Laptop",...} → Dữ liệu trả về cho client.
 
-- Tính dễ dàng triển khai:
-  SOAP: Phức tạp, khó triển khai
-  REST: Đơn giản, dễ triển khai và bảo trì
+Mã trạng thái 201 Created thuộc nhóm **2xx (Success)**. Ý nghĩa: Yêu cầu đã được xử lý thành công và server đã tạo ra một tài nguyên mới.
 
-3. Chuyển JSON sang XML:
+3. Nếu client gửi GET /api/sanpham/999 nhưng sản phẩm không tồn tại:
+   → Server trả về mã **404 Not Found**.
+   Ý nghĩa: Tài nguyên mà client yêu cầu không tồn tại trên server.
 
-<sinhvien>
-    <maso>SV001</maso>
-    <hoten>Nguyễn Văn A</hoten>
-    <diem>
-        <item>8.5</item>
-        <item>7.0</item>
-        <item>9.0</item>
-    </diem>
-</sinhvien>
-
-4. Ưu điểm của JSON so với XML:
-- JSON nhẹ hơn, kích thước dữ liệu nhỏ hơn nên tiết kiệm băng thông và truyền nhanh hơn.
-- Cú pháp đơn giản, dễ đọc, dễ hiểu và dễ parse hơn.
-- Parse nhanh hơn, đặc biệt phù hợp với JavaScript và các ứng dụng web/mobile.
-- Dễ dàng chuyển đổi sang Object trong hầu hết các ngôn ngữ lập trình.
-  */
+4. Khi server gặp lỗi xử lý không xác định (lỗi nội bộ):
+   → Sử dụng mã trạng thái **500 Internal Server Error** (thuộc nhóm 5xx - Server Error).
+   */
